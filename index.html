@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>釜山首爾自由行 (10/3 - 10/11)</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --primary-text: #212529;
+            --secondary-text: #6c757d;
+            --accent-color: #2b6cb0;
+            --accent-light: #ebf8ff;
+            --border-color: #e9ecef;
+            --badge-bg: #edf2f7;
+            --badge-text: #4a5568;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text);
+            line-height: 1.6;
+            padding: 20px 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header Header Styling */
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a202c;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: var(--secondary-text);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-toggle-all {
+            background-color: transparent;
+            border: 1px solid #cbd5e0;
+            color: #4a5568;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-toggle-all:hover {
+            background-color: #edf2f7;
+            color: #1a202c;
+        }
+
+        /* Accordion Structure */
+        .day-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .day-header {
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            background-color: var(--card-bg);
+            transition: background-color 0.2s ease;
+        }
+
+        .day-header:hover {
+            background-color: #f7fafc;
+        }
+
+        .day-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .day-badge {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .day-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            color: var(--secondary-text);
+            transition: transform 0.3s ease;
+        }
+
+        .day-card.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .day-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease-out, padding 0.25s ease;
+            padding: 0 20px;
+            border-top: 0px solid var(--border-color);
+        }
+
+        .day-card.active .day-content {
+            padding: 15px 20px 20px 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Schedule Timeline Items */
+        .timeline-item {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 16px;
+            border-left: 2px solid #e2e8f0;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+        }
+
+        .time {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 2px;
+        }
+
+        .item-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .item-desc {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-top: 4px;
+        }
+
+        /* Special Highlights & Notes */
+        .plan-box {
+            background-color: var(--accent-light);
+            border-left: 3px solid var(--accent-color);
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 6px 0;
+            font-size: 0.88rem;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 4px;
+            margin-top: 4px;
+        }
+
+        ul.sub-list {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 4px;
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: var(--secondary-text);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>釜山首爾自由行</h1>
+        <p>2026.10.03 – 2026.10.11 (9天8夜)</p>
+    </header>
+
+    <div class="controls">
+        <button class="btn-toggle-all" onclick="toggleAll(true)">全部展開</button>
+        <button class="btn-toggle-all" onclick="toggleAll(false)">全部摺疊</button>
+    </div>
+
+    <div id="schedule">
+
+        <!-- Day 1 -->
+        <div class="day-card active">
+            <div class="day-header" onclick="toggleCard(this)">
+                <div class="day-title-group">
+                    <span class="day-badge">Day 1</span>
+                    <span class="day-title">10/3（六）抵達首爾 ➜ 搭乘 KTX 前往釜山</span>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="timeline-item">
+                    <div class="time">05:00</div>
+                    <div class="item-title">小港機場報到</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">07:05 - 11:00</div>
+                    <div class="item-title">航班時間</div>
+                    <div class="item-desc">抵達金浦國際機場（預計 12:00 完成領行李）</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">午餐方案 (備選)</div>
+                    <div class="plan-box">
+                        <strong>PLAN 1：</strong> 若「萬倍阿里郎」候位來得及吃，搭 UBER 過去，吃飽預計 14:00 出發往釜山。<br>
+                        <strong>PLAN 2：</strong> 直接前往首爾車站用餐。
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">12:20 - 12:45</div>
+                    <div class="item-title">搭乘機場快線 AREX</div>
+                    <div class="item-desc">搭乘普通車至首爾站（班次約 5-10 分鐘，車程 22 分鐘）</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">13:00 - 14:15</div>
+                    <div class="item-title">首爾車站 2F 午餐</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">14:42 - 17:22</div>
+                    <div class="item-title">搭乘 KTX 至釜山站</div>
+                    <div class="note">※ 需預先訂票（成人 NT$1266 / 兒童 NT$633）</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">17:45 - 18:10</div>
+                    <div class="item-title">前往住宿處 Check-in</div>
+                    <div class="item-desc">地鐵1號線：釜山站 ➜ 釜田站（出站步行約 5 分鐘放行李）</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">晚餐</div>
+                    <div class="item-title">廣安里美食</div>
+                    <div class="item-desc">地鐵2號線：西面站 ➜ 廣安站</div>
+                    <div class="note">※ 使用 Catchtable 遠端候位：83烤肉 或 烤肉男（必點豬頸肉、五花肉、起司杏鮑菇）。若等太久可備選「水邊最高豬肉湯飯」。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">晚間活動</div>
+                    <div class="item-title">廣安里無人機燈光秀 & 周邊散策</div>
+                    <div class="item-desc">
+                        <ul>
+                            <li>冬季限定週六表演時間：19:00 / 21:00</li>
+                            <li>甜點推薦：차선책 (次善策)</li>
+                            <li>周邊景點：Millac the Market（民樂複合式廣場）</li>
+                        </ul>
+                    </div>
+                    <div class="note">預計 22:30 返回住宿休息</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleCard(this)">
+                <div class="day-title-group">
+                    <span class="day-badge">Day 2</span>
+                    <span class="day-title">10/4（日）海雲台膠囊列車 ➜ 青沙浦 ➜ 西面商圈</span>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="timeline-item">
+                    <div class="time">09:00 - 10:00</div>
+                    <div class="item-title">交通 & 早餐</div>
+                    <div class="item-desc">西面站 ➜ 中洞站（車程約 40 分鐘 + 步行 10 分鐘）<br>早餐：大海 Maru 鮑魚粥</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">11:15</div>
+                    <div class="item-title">海雲台膠囊列車</div>
+                    <div class="note">※ 已預約 11:30 - 12:00 班次（搭乘時間約 30 分鐘）</div>
+                    <div class="item-desc">出站即抵達「灌籃高手平交道」，順遊青沙浦天空步道（步行約 10 分鐘）。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">午餐</div>
+                    <div class="item-title">青沙浦烤貝一條街</div>
+                    <div class="item-desc">享用烤貝、烤鰻魚（推薦：秀敏家 / 海林家 / 道熙家）<br>餐後搭乘海岸列車由青沙浦返回尾浦。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">下午茶 & 逛街</div>
+                    <div class="item-title">海雲台周邊散步</div>
+                    <div class="item-desc">
+                        <span class="tag">Dongbaek104 咖啡</span>
+                        <span class="tag">老虎冰淇淋大福 (開心果味)</span>
+                        <span class="tag">emart 海雲台店</span>
+                    </div>
+                    <div class="note">回程：搭 UBER 至中洞站 ➜ 搭地鐵回西面站（車程約 40 分鐘）</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">晚餐 & 夜間活動</div>
+                    <div class="item-title">西面站周邊巡禮</div>
+                    <div class="item-desc">晚餐可選：豬肉湯飯、刀削麵、馬涼薯排骨湯 (1988)<br>採買行程：DAISO、Olive Young、藥局</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleCard(this)">
+                <div class="day-title-group">
+                    <span class="day-badge">Day 3</span>
+                    <span class="day-title">10/5（一）美髮體驗 ➜ 西面美食</span>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="timeline-item">
+                    <div class="time">09:00</div>
+                    <div class="item-title">享用早餐</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">10:30 - 13:00</div>
+                    <div class="item-title">First Hair 染髮體驗</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">13:30</div>
+                    <div class="item-title">午餐：西面烤肉</div>
+                    <div class="note">※ 預計提前使用 Catchtable 遠端候位</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 4 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleCard(this)">
+                <div class="day-title-group">
+                    <span class="day-badge">Day 4</span>
+                    <span class="day-title">10/6（二）市民公園 ➜ 國際市場 ➜ 札嘎其海鮮</span>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="timeline-item">
+                    <div class="time">09:00 - 10:30</div>
+                    <div class="item-title">釜山市民公園</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">11:00 - 12:00</div>
+                    <div class="item-title">Traders Wholesale Club</div>
+                    <div class="item-desc">位於公園西南側正對面（大型倉儲式超市）</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">午餐</div>
+                    <div class="item-title">味贊王烤肉</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">下午</div>
+                    <div class="item-title">南浦洞 / 國際市場散策</div>
+                    <div class="item-desc">
+                        地鐵1號線：西面站 ➜ 中央站
+                        <ul class="sub-list">
+                            <li>新昌吐司</li>
+                            <li>國際市場被單巡禮：永一寢具 / 五福寢具 / 韓日寢具</li>
+                            <li>BIFF 廣場：堅果黑糖餅</li>
+                            <li>光復路時尚街</li>
+                            <li>樂天百貨 & 樂天超市</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">18:00</div>
+                    <div class="item-title">晚餐：札嘎其市場海鮮</div>
+                    <div class="item-desc">推薦攤位：相鄰新東亞市場的 85號、87號</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">晚上</div>
+                    <div class="item-title">三井塔娛樂體驗</div>
+                    <div class="item-desc">返回西面三井塔：雷射槍體驗 + Running Man 體驗館</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 5 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleCard(this)">
+                <div class="day-title-group">
+                    <span class="day-badge">Day 5</span>
+                    <span class="day-title">10/7（三）樂天世界 ➜ Skyline Luge ➜ 採買</span>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="timeline-item">
+                    <div class="time">08:30 - 10:00</div>
+                    <div class="item-title">交通：前往樂天世界</div>
+                    <div class="item-desc">
+                        <strong>路線 1：</strong> 搭 1001 號公車至奧西利亞站 (Osiria) 步行 10 分鐘<br>
+                        <strong>路線 2：</strong> 地鐵2號線(西面➜釜田) ➜ 轉東海線(釜田➜東釜山旅遊區站 1號出口) ➜ 步行 10 分鐘
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">10:00 - 15:30</div>
+                    <div class="item-title">釜山樂天世界冒險樂園</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">15:30</div>
+                    <div class="item-title">Skyline Luge 斜坡滑車</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">傍晚 & 晚餐</div>
+                    <div class="item-title">回市區採買 & 美食</div>
+                    <div class="item-desc">
+                        搭乘 UBER 返回市區
+                        <ul class="sub-list">
+                            <li>晚餐：烤鰻魚</li>
+                            <li>伴手禮：Bada sand</li>
+                            <li>李在模披薩（營業至 21:10，可先點外帶回住宿）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 6 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleCard(this)">
+                <div class="day-title-group">
+                    <span class="day-badge">Day 6</span>
+                    <span class="day-title">10/8（四）移動至首爾 ➜ 明洞夜市商圈</span>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="timeline-item">
+                    <div class="time">白天</div>
+                    <div class="item-title">釜山 ➜ 首爾移動</div>
+                    <div class="item-desc">車程約 3 小時，預計 17:00 抵達首爾住宿（336-7 Toegye-ro, Jung-gu, Seoul）</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">18:00</div>
+                    <div class="item-title">晚餐：Palpal sol 肥腸忠武路</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">晚上</div>
+                    <div class="item-title">明洞商圈購物巡禮</div>
+                    <div class="item-desc">
+                        <span class="tag">10% coffee</span>
+                        <span class="tag">樂天百貨 9F (踩小人鞋子 78under)</span>
+                        <span class="tag">Nyunyu</span>
+                        <span class="tag">Artbox</span>
+                        <span class="tag">明洞夜市</span>
+                    </div>
+                    <div class="note">※ Bucks & leather 營業時間 20:00（營業日：週日～週四，請把握今晚逛！）</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 7 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleCard(this)">
+                <div class="day-title-group">
+                    <span class="day-badge">Day 7</span>
+                    <span class="day-title">10/9（五）聖水洞文青探索</span>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="timeline-item">
+                    <div class="time">上午</div>
+                    <div class="item-title">前往聖水洞</div>
+                    <div class="item-desc">東大門歷史文化公園站 ➜ Ttukseom (뚝섬)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">10:00</div>
+                    <div class="item-title">早午餐：元祖麻浦碳烤排骨</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">下午</div>
+                    <div class="item-title">聖水洞店家巡禮</div>
+                    <div class="item-desc">
+                        <span class="tag">一天咖啡屋</span>
+                        <span class="tag">New Mix Coffee</span>
+                        <span class="tag">Ongo</span>
+                        <span class="tag">hetras</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">晚餐</div>
+                    <div class="item-title">Dop 土豆湯 (Dap 馬鈴薯排骨湯)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 8 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleCard(this)">
+                <div class="day-title-group">
+                    <span class="day-badge">Day 8</span>
+                    <span class="day-title">10/10（六）弘大 ➜ 景福宮夜間特別觀覽</span>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="timeline-item">
+                    <div class="time">白天</div>
+                    <div class="item-title">弘大商圈 & 美食</div>
+                    <div class="item-desc">
+                        美食推薦：橋村炸雞 / Sanminari 一隻雞 / 海木（鰻魚飯 + 海膽）
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">傍晚 - 晚上</div>
+                    <div class="item-title">景福宮夜間參觀</div>
+                    <div class="item-desc">
+                        體驗：租韓服體驗夜遊景福宮<br>
+                        表演時間：18:20、19:30 各有一場表演
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 9 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleCard(this)">
+                <div class="day-title-group">
+                    <span class="day-badge">Day 9</span>
+                    <span class="day-title">10/11（日）返家</span>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="timeline-item">
+                    <div class="time">08:30</div>
+                    <div class="item-title">出發前往機場</div>
+                    <div class="item-desc">準備結束豐富的韓國之旅！</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>祝你有個愉快的釜山首爾之旅！ ✈️</p>
+    </footer>
+
+    <script>
+        // 切換單個卡片展開/摺疊
+        function toggleCard(headerElement) {
+            const card = headerElement.parentElement;
+            const content = card.querySelector('.day-content');
+            
+            if (card.classList.contains('active')) {
+                card.classList.remove('active');
+                content.style.maxHeight = null;
+            } else {
+                card.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+
+        // 初始化展開狀態
+        document.addEventListener("DOMContentLoaded", () => {
+            const activeCards = document.querySelectorAll('.day-card.active');
+            activeCards.forEach(card => {
+                const content = card.querySelector('.day-content');
+                content.style.maxHeight = content.scrollHeight + "px";
+            });
+        });
+
+        // 一鍵全部展開或摺疊
+        function toggleAll(open) {
+            const cards = document.querySelectorAll('.day-card');
+            cards.forEach(card => {
+                const content = card.querySelector('.day-content');
+                if (open) {
+                    card.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + "px";
+                } else {
+                    card.classList.remove('active');
+                    content.style.maxHeight = null;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
